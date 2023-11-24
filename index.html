@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZK-Bench Editor</title>
+    <script src="/tailwind.es"></script>
+</head>
+<body>
+    <div class="bg-white py-4 px-4 xl:px-0 lg:py-32">
+        <div class="mx-auto max-w-2xl ">
+          <div class="">
+            <p class="mt-2 font-bold tracking-tight text-gray-900 text-4xl">zk-bench encryptor</p>
+            <p class="mt-10 text-2xl font-bold tracking-tight text-gray-900 sm:text-2xl">Why zero-knowledge benchmarking?</p>
+            <p class="mt-4 text-lg leading-7 text-gray-600">Developers typically evaluate AI systems by first having them answer a number of exam questions on a given topic. Then, they check their answers by automatically comparing them with the reference solutions.</p>
+            <p class="mt-4 text-lg leading-7 text-gray-600">However, there is a growing need to evaluate AI systems on sensitive topics, such as biowarfare or cyberwarfare. In these cases, a benchmark meant to assess dangerous AI capabilities would <i>itself</i> pose a hazard. The benchmark's reference solutions would provide a veritable compendium on topics better left undiscussed.</p> 
+            <p class="mt-4 text-lg leading-7 text-gray-600">In this context, we are investigating zero-knowledge benchmarks as a means of assessing dangerous AI capabilities without divulging the reference solutions.</p>
+
+            <p class="mt-10 text-2xl font-bold tracking-tight text-gray-900 sm:text-2xl">How does it work?</p>
+            <p class="mt-4 text-lg leading-7 text-gray-600">Building on ideas from zero-knowledge cryptography and federated learning, a zk-bench works by first irreversibly encrypting the reference solutions into sequences that are not human-readable. For instance, the text "reference solution" would be mapped to "dc65678e6ea9f..." even before leaving the device of the person who contributed that particular exam question to the benchmark.</p>
+            <p class="mt-4 text-lg leading-7 text-gray-600">When an AI system is later tested on a zk-bench, its candidate answers get encrypted in the same exact way. Finally, if the encrypted versions of the candidate answer and the reference solution are identical, then the AI system is deemed to have answered that particular question correctly.</p>
+
+            <p class="mt-10 text-2xl font-bold tracking-tight text-gray-900 sm:text-2xl">What kinds of exam question are appropriate?</p>
+            <p class="mt-4 text-lg leading-7 text-gray-600">While the zk-bench as an evaluation mechanism provides valuable security benefits, it also has limitations. The primary constraint comes from the fact that even answers that differ by a handful of characters get encrypted in completely different ways (e.g. "Reference Solution" gets mapped to "8c411e8ea95af..."). This means that questions included in a zk-bench need to have a narrow, well-defined, unambiguous answer. For instance, a question could ask for the standard name of a certain substance, or the exact integer denoting a networking port.</p>
+            <p class="mt-4 text-lg leading-7 text-gray-600">The second constraint comes from the fact that, while the encryption is virtually impossible to reverse engineer, one could still uncover human-readable solutions by encrypting a large number of candidate answers until obtaining a match. This means that questions included in a zk-bench should preferably call for obscure, non-trivial answers. If instead the question called for a "yes" or "no" answer, then it could be trivially brute-forced by encrypting both options and indentifying the matching one. In sum, questions should call for answers that are obscure, yet unambiguous.</p>
+
+            <p class="mt-10 text-2xl font-bold tracking-tight text-gray-900 sm:text-2xl">How can I contribute questions?</p>
+            <p class="mt-4 text-lg leading-7 text-gray-600">If you read this, you have likely been approached to contribute to the assessment of sensitive AI capabilities on a particular topic. You can contribute your expertise by populating the spreadsheet you have been sent separately with novel questions and reference solutions. You can use your spreadsheet editor of choice to accomplish this. Please err on the side of only including questions for which you are confident in the answer and which satisfy the above desiderata.</p>
+            
+            <p class="mt-4 text-lg leading-7 text-gray-600">In addition to contributing your own questions, your spreadsheet might also contain questions contributed by other experts. Solving these additional exam questions by filling in your answers would help us increase the quality of the benchmark by filtering out questions with low inter-annotator agreement. Note that we can achieve this by measuring consensus among the encrypted answers, without having access to the human-readable answers ourselves. Please err on the side of not answering external questions when not confident in the answers.</p>
+
+            <p class="mt-4 text-lg leading-7 text-gray-600">After filling in the spreadsheet, load it on the current page using the button below. After the file is uploaded, it automatically gets processed in your browser so as to encrypt the reference solutions. Following this, you can download the resulting file. The tool expects spreadsheets in CSV format, and issues processed spreadsheets in the same format.</p>
+
+            <p class="mt-10 text-2xl font-bold tracking-tight text-gray-900 sm:text-2xl">Why trust this protocol?</p>
+            <p class="mt-4 text-lg leading-7 text-gray-600">This zk-bench implementation employs SHA256 encryption, an industry standard. To confirm that we are in fact employing this algorithm, consider using a third-party SHA256 encryption tool to check whether the output matches that of the present tool. However, keep in mind that we run basic preprocessing before encryption: lowercasing, removing duplicate whitespace, and trimming trailing whitespace. For instance, "    Reference &nbsp&nbsp   Solution   " would be preprocessed to "reference solution" before encryption in order to avoid superficial divergences.</p>
+
+            <p class="mt-4 text-lg leading-7 text-gray-600">Furthermore, the encryption tool accessible through this page is entirely "client-side." In other words, it runs entirely on your device, despite having been delivered through a web page. To confirm this, you can try using the tool after turning off your internet connection. Alternatively, you can verify the lack of network requests in your browser's developer console. Finally, you can follow the tool's logic by looking into the second script present in the page source, the first being for styling.</p>
+          </div>
+
+          <div class="mx-auto mt-16 sm:mt-20 lg:mt-16">
+            <dl class="grid  grid-cols-1 gap-x-8 gap-y-10lg:grid-cols-3 lg:gap-y-16">
+            <div class="relative">
+                <div class="h-fit bg-green-600 rounded-3xl shadow-2xl">
+                    <div class="p-8">
+                        <a href="#">
+                            <h5 class="mb-6 text-3xl text-white font-bold tracking-tight text-gray-900 ">Encrypt reference solutions</h5>
+                        </a>
+                        <p class="mt-6 font-normal text-gray-100 ">Load a spreadsheet containing questions and human-readable answers following the structure of the original spreadsheet. Only CSV files are allowed. Both questions and answers should be one-liners.</p>
+                    </div>
+                    
+                    <label id="button-label" for="file" class="font-normal cursor-pointer">
+                    <div id="button-wrapper" class="p-8 pr-7 bg-gradient-to-br from-green-800 rounded-b-3xl space-y-4 text-left text-gray-100 text-xl">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-10 h-10 inline mr-4 mb-1">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Load raw file
+                    </div>
+                    </label>
+                    <input class="hidden" id="file" type="file" accept=".csv"/>
+
+                    <a id="download-link" class="hidden">
+                    <div id="button-wrapper" class="p-8 pr-7 bg-gradient-to-br from-green-800 rounded-b-3xl space-y-4 text-left text-gray-100 text-xl">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-10 h-10 inline mr-4 mb-1">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                          </svg>
+                          
+                        Download processed file
+                    </div>
+                    </a>
+                </div>
+            </div>
+            </dl>
+          </div>
+        </div>
+    </div>
+    <footer class="p-4 sm:p-6 bg-white">
+        <div class="mx-auto max-w-screen-xl">
+            <div class="flex items-center justify-between">
+                <span class="text-sm text-gray-600 text-center grow">© 2023 <a href="https://straumli.xyz" class="hover:underline">Straumli™</a> All Rights Reserved.
+                </span>
+            </div>
+        </div>
+    </footer>
+
+
+    <a type="button" id="process"></a> 
+    <script type="module" src="/process.js"></script>
+</body>
+
+</html>
