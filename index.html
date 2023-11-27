@@ -36,7 +36,7 @@
 
             <p class="mt-10 text-2xl font-bold tracking-tight text-gray-900 sm:text-2xl">Why trust this protocol?</p>
             <p class="mt-4 text-lg leading-7 text-gray-600">This zk-bench implementation employs Argon2id hashing, <a class="underline" href="https://csrc.nist.gov/projects/hash-functions">the official recommendation</a> of <a class="underline" href="https://owasp.org/">OWASP</a>, a leading organization promoting secure software. To confirm that we are in fact employing this algorithm, consider using a third-party Argon2id hashing tool to check whether the output matches that of the present tool.</p>
-            <p class="mt-4 text-lg leading-7 text-gray-600">However, keep in mind that we run basic preprocessing before hashing: lowercasing, removing duplicate whitespace, and trimming trailing whitespace. For instance, "    Reference &nbsp&nbsp   Solution   " would be preprocessed to "reference solution" before hashing in order to avoid superficial divergences. In addition, we employ 32 rehashings and a 100 MiB memory burden, making hashing orders of magnitude more resource-intensive than with the recommended settings, as a proportional response to the nature of the content being presently processed.</p>
+            <p class="mt-4 text-lg leading-7 text-gray-600">However, keep in mind that we run basic preprocessing before hashing: lowercasing, removing duplicate whitespace, and trimming trailing whitespace. For instance, "    Reference &nbsp&nbsp   Solution   " would be preprocessed to "reference solution" before hashing, in order to avoid superficial divergences. In addition, we employ the exam questions as <a class="underline" href="https://en.wikipedia.org/wiki/Salt_(cryptography)">"salt"</a> for the reference solution, forcing brute-force attackers to start from scratch with each exam question. Finally, we employ 32 rehashings and a 100 MiB memory burden, making hashing orders of magnitude more resource-intensive than with the recommended settings, as a proportional response to the nature of the content being presently processed.</p>
 
             <p class="mt-4 text-lg leading-7 text-gray-600">Furthermore, the hashing tool accessible through this page is entirely "client-side." In other words, it runs entirely on your device, despite having been delivered through a web page. To confirm this, you can try using the tool after turning off your internet connection. Alternatively, you can verify the lack of network requests in your browser's developer console.</p>
           </div>
@@ -88,7 +88,7 @@
 
 
     <a type="button" id="process"></a> 
-    <script type="module" src="/process.js"></script>
+    <script type="module" src="/zk-bench/process.js"></script>
 </body>
 
 </html>
