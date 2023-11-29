@@ -20,24 +20,21 @@
     }
 
     async function processCSV(allText) {
-        var allTextLines = allText.split(/\r\n|\n/);
-        var headers = allTextLines[0].split(',');
-        var lines = [headers];
-        console.log(lines)
+        var data = Papa.parse(allText)["data"];
+        var lines = [data[0]];
 
-        for (var i = 1; i < allTextLines.length; i++) {
-            var data = allTextLines[i].split(',');
-            if (data.length == headers.length) {
+        for (var i = 1; i < data.length; i++) {
+            if (data[i].length == data[0].length) {
 
                 var tarr = [];
-                for (var j = 0; j < headers.length; j++) {
+                for (var j = 0; j < data[0].length; j++) {
                     if (j == 0) {
-                        tarr.push(data[j]);
+                        tarr.push(data[i][j]);
                     } else {
-                        if (data[j] == "") {
+                        if (data[i][j] == "") {
                             tarr.push("");
                         } else {
-                            tarr.push(await hash(data[0], data[j]))
+                            tarr.push(await hash(data[i][0], data[i][j]))
                         }
                     }
                 }
@@ -55,7 +52,7 @@
     Processing file... (~1 minute / answer)`;
 
         processCSV(event.target.result).then((lines) => {
-            let csvContent = "data:text/csv;charset=utf-8," + lines.map(e => e.join(",")).join("\n");
+            let csvContent = "data:text/csv;charset=utf-8," + Papa.unparse(lines);
             var label = document.getElementById("button-label")
             label.setAttribute("for", "");
             label.style.display = "none";
