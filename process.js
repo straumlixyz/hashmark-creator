@@ -7,13 +7,13 @@
     }
 
     async function hash(question, answer) {
-        const preprocessedPass = answer.trim().replace(/\s+/g, ' ').toLowerCase();
+        const preprocessedPass = answer.trim().replace(/\s+/g, ' ').replace(/\.$/, '').toLowerCase();
         const preprocessedSalt = question.trim().replace(/\s+/g, ' ').toLowerCase();
 
         return await argon2.hash({
             pass: preprocessedPass,
             salt: preprocessedSalt,
-            time: 32,
+            time: 128,
             mem: 102400,
             type: argon2.ArgonType.Argon2id
         }).then(h => h.hashHex);
